@@ -4,6 +4,11 @@ const path = require('path')
 
 
 const app = express();
+
+// Cors
+var cors = require('cors')
+
+app.use(cors()) 
 // connect to database
 const  { mongoose } = require('./database');
 

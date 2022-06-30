@@ -6,17 +6,27 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "webpack": "webpack --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "mongoose": "^6.4.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "webpack": "^5.73.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.18"
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "nodemon": "^2.0.18",
+    "webpack-cli": "^4.10.0"
   }
 }
