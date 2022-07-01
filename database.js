@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const URI = 'mongodb://localhost/beeradvisor';
+const URI = 'mongodb://localhost:/beeradvisor';
 
 mongoose.connect(URI)
     .then(db =>console.log('DB is connected'))
