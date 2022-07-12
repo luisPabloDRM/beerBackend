@@ -3,9 +3,15 @@ const router = express.Router();
 
 const Upload = require('../models/update')
 // GET
-router.get('/',  async (req, res) =>{
-    const uploads =  await Upload.find()
-    res.json(uploads);
+router.get('/posts',  async (req, res, next) =>{
+    try{
+        const uploads =  await Upload.find()
+        return res.status(200).json(uploads);
+    }catch (error){
+        return next(error);
+    }
+    
+    
 });
 
 router.get('/:id', async( req, res)=> {
