@@ -21,16 +21,16 @@ router.get('/:id', async( req, res)=> {
 
 // ADD
 router.post('/', async (req, res)=> {
-    const {name, image, price, rating} = req.body;
-    const uploadPost = new Upload({name, image, price, rating})
+    const {name, image, price, rating, description} = req.body;
+    const uploadPost = new Upload({name, image, price, rating, description})
     await uploadPost.save()
     res.json({status: 'Uploaded'});
 });
 
 // UPDATE
 router.put('/:id', async(req, res) =>{
-    const {name, image, price, rating} = req.body;
-    const newUpload = {name, image, price, rating};
+    const {name, image, price, rating, description} = req.body;
+    const newUpload = {name, image, price, rating, description};
     await Upload.findByIdAndUpdate(req.params.id, newUpload)
     res.json({status: 'modified'});
 })
