@@ -38,8 +38,8 @@ router.put('/:id', async(req, res) =>{
 // DELETE
 
 router.delete('/delete/:id', async(req, res) =>{
-   
-    await Upload.findByIdAndRemove(req.params.id)
+   const {id} =req.params
+    await Upload.deleteOne({ _id:id})
     res.json({status: 'Deleted'});
 })
 
