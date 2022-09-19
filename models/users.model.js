@@ -1,9 +1,11 @@
-const mongoose = require('mongoose');
+const Mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require ('jsonwebtoken');
 const {ACCES_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env;
 
-const UserSchema = new mongoose.Schema({
+const Token = require('./token.model')
+
+const UserSchema = new Mongoose.Schema({
     username : {type:String, required: true, unique: true},
     password : {type: String, required : true},
     name:{type:String}
@@ -27,4 +29,57 @@ UserSchema.pre('save', function(next){
     }else{
         next();
     }
-})
+});
+
+UserSchema.methods.usernameExists = async function(username){
+    try {
+        let result = await Mongoose.model('User').find({username : username});
+        
+        return result.length > 0;
+
+    } catch (ex) {
+        return false;
+    }
+
+};
+
+UserSchema.methods.isCorrectPassword =  async function(password, hash){
+    try {
+         const same = await bcrypt.compare(password, hash);
+
+        return same;
+
+    } catch (ex) {
+        return false
+    }
+ }  
+
+ UserSchema.methods.createAccessToken = function(){
+    const {id, username } = this;
+
+    const accesToken = jwt.sign(
+        {user: {id , username}},
+        ACCES_TOKEN_SECRET,
+        {expiresIn: '1d'}
+    );
+    return accesToken;
+ }
+
+ UserSchema.methods.createRefreshToken =  async function(){
+    const {id, username } = this;
+    const refreshToken = jwt.sign(
+        {user: {id , username}},
+        REFRESH_TOKEN_SECRET,
+        {expiresIn: '20d'}
+    );
+
+    try {
+        await new Token({token : refreshToken}).save();
+
+        return refreshToken
+    } catch (ex) {
+        next(new Error('Error creating refresh token'))
+    }
+ }
+
+ module.exports = Mongoose.model('User', UserSchema)
