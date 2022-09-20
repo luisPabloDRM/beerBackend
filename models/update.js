@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const Mongoose = require('mongoose');
+const {Schema} = Mongoose;
 
 
 
@@ -16,6 +16,6 @@ const uploadSchema = new Schema(
     timestamps: true
 })
 
-const UploadModel = mongoose.model("Upload", uploadSchema);
+const UploadModel = Mongoose.model("Upload", uploadSchema);
 
 module.exports = UploadModel;
