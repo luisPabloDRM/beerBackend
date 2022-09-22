@@ -24,7 +24,7 @@ app.use(express.json());
 //Routes
 app.use('/upload' , require('./routes/update.routes'));
 app.use('/users' , require('./routes/users.routes'));
-//app.use('/auth' , require('./routes/auth.routes'));
+app.use('/auth' , require('./routes/auth.routes'));
 
 //Static files
 

@@ -1,6 +1,9 @@
 const express = require('express');
+const createError = require('http-errors')
 const router = express.Router();
+const {jsonResponse} = require('../lib/jsonresponse')
 const User= require('../models/users.model')
+
 
 /* GET Users Listing*/
 router.get('/', async function(req, res, next){
@@ -27,17 +30,17 @@ router.post('/', async function(req, res, next){
 
         if(exists){
             //existe el nombre de usuario
-            res.json({
-                message: 'Usuario ya existe'
-            })
+            res.json(jsonResponse(400,{
+                message: 'The user is taken. Try with another one'
+            }))
             //next();
 
         }else{
             await user.save();
 
-            res.json({
-                message: 'Usuario registrado'
-            })
+            res.json(jsonResponse(200, {
+                message : 'User created succesfully'
+            }))
         }
     }
 })
