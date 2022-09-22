@@ -1,11 +1,13 @@
+require('dotenv').config();
 const Mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require ('jsonwebtoken');
-const {ACCES_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env;
-
 const Token = require('./token.model')
 
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+
 const UserSchema = new Mongoose.Schema({
+    id: {type: Object},
     username : {type:String, required: true, unique: true},
     password : {type: String, required : true},
     name:{type:String}
@@ -55,15 +57,15 @@ UserSchema.methods.isCorrectPassword =  async function(password, hash){
  }  
 
  UserSchema.methods.createAccessToken = function(){
-    const {id, username } = this;
-
-    const accesToken = jwt.sign(
-        {user: {id , username}},
-        ACCES_TOKEN_SECRET,
+    const {id, username} = this;
+    const accessToken = jwt.sign(
+        { user: {id, username}}, 
+        ACCESS_TOKEN_SECRET, 
         {expiresIn: '1d'}
     );
-    return accesToken;
- }
+
+    return accessToken;
+};
 
  UserSchema.methods.createRefreshToken =  async function(){
     const {id, username } = this;

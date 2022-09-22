@@ -1,44 +1,47 @@
 var express = require('express');
-const createError = require('http-errors');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
-const Token = require('../models/token.model')
-const {jsonResponse} = require('../lib/jsonresponse')
-const {ACCCES_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env;
 
 const User = require('../models/users.model');
+const Token = require('../models/token.model')
+
+const jwt = require('jsonwebtoken');
+const {jsonResponse} = require('../lib/jsonresponse')
+const {ACCCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env;
+
+const router = express.Router();
+
 
 //RUTAS
 
 router.post('/singup', async (req, res, next)=>{
-    const {username, password} = req.body
-    if(!username || !password){
-        next();
-    }else if(username && password){
-        const user = new User({username, password});
+    const {username, password} = req.body;
 
-        const exists = await user.usernameExists(username);
+    try{
 
-        if(exists){
-            //existe el nombre de usuario
-            res.json(jsonResponse(400,{
-                message: 'The user is taken. Try with another one'
-            }))
-            //next();
+        const user = new User();
+        const userExists = await user.usernameExists(username);
 
+        if(userExists){
+            return next(new Error('user already exists'));
         }else{
-            const accessToken = user.createAccessToken();
-            const refreshToken = user.createRefreshToken();
-            await user.save();
+            const user = new User({username, password});
+
+            let accessToken = await user.createAccessToken();
+            let refreshToken = await user.createRefreshToken();
+
+            user.save();
 
             res.json(jsonResponse(200, {
-                message : 'User created succesfully',
+                message: 'User created successfully',
                 accessToken,
                 refreshToken
-            }))
+            }));
         }
+
+    }catch(err){
+        console.log(err);
     }
 });
+
 
 router.post('/login', (req, res, next)=>{
 
