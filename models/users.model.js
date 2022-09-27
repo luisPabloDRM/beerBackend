@@ -9,8 +9,8 @@ const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const UserSchema = new Mongoose.Schema({
     id: {type: Object},
     username : {type:String, required: true, unique: true},
-    password : {type: String, required : true},
-    name:{type:String}
+    mail:{type:String},
+    password : {type: String, required : true}
 })
 
 // Hacemos Metodo para saber que queremos que pase cuando se inserte un nuevo usuario
